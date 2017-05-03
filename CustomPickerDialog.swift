@@ -1,7 +1,5 @@
 //
-//  PickerDialog.swift
-//  SharjahSportsHealthApp
-//
+//  CustomPickerDialog.swift
 //  Created by Muhammed Naeem on 5/3/17.
 //  Copyright © 2017 Muhammed Naeem. All rights reserved.
 //
