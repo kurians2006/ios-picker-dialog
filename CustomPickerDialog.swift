@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import QuartzCore
 
-class CustomPickerDialog: UIView, UIPickerViewDelegate {
+class CustomPickerDialog: UIView, UIPickerViewDelegate, UIPickerViewDataSource {
 
     typealias PickerCallback = (_ value: String) -> Void
 
@@ -60,6 +60,7 @@ class CustomPickerDialog: UIView, UIPickerViewDelegate {
         self.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
 
         picker.delegate = self
+        picker.dataSource = self
 
         self.addSubview(self.dialogView!)
     }
@@ -70,12 +71,19 @@ class CustomPickerDialog: UIView, UIPickerViewDelegate {
     }
 
     /* Required UIPickerView functions */
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    // DataSource
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
 
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return pickerData.count
+    }
+    
+    // Delegate
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
     }
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -111,7 +119,7 @@ class CustomPickerDialog: UIView, UIPickerViewDelegate {
         UIApplication.shared.windows.first!.addSubview(self)
         UIApplication.shared.windows.first!.endEditing(true)
 
-        NotificationCenter.default.addObserver(self, selector: Selector(("deviceOrientationDidChange:")), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CustomPickerDialog.deviceOrientationDidChange), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
 
         /* Anim */
         UIView.animate(
@@ -230,7 +238,7 @@ class CustomPickerDialog: UIView, UIPickerViewDelegate {
         self.cancelButton.setTitleColor(UIColor.init(hexString: "555555"), for: UIControlState.highlighted)
         self.cancelButton.titleLabel!.font = UIFont(name: "AvenirNext-Medium", size: 15)
         self.cancelButton.layer.cornerRadius = kPickerDialogCornerRadius
-        self.cancelButton.addTarget(self, action: Selector(("buttonTapped:")), for: UIControlEvents.touchUpInside)
+        self.cancelButton.addTarget(self, action: #selector(CustomPickerDialog.buttonTapped), for: UIControlEvents.touchUpInside)
         container.addSubview(self.cancelButton)
 
         self.doneButton = UIButton(type: UIButtonType.custom) as UIButton
@@ -245,7 +253,7 @@ class CustomPickerDialog: UIView, UIPickerViewDelegate {
         self.doneButton.setTitleColor(UIColor.init(hexString: "555555"), for: UIControlState.highlighted)
         self.doneButton.titleLabel!.font = UIFont(name: "AvenirNext-Medium", size: 15)
         self.doneButton.layer.cornerRadius = kPickerDialogCornerRadius
-        self.doneButton.addTarget(self, action: Selector("buttonTapped:"), for: UIControlEvents.touchUpInside)
+        self.doneButton.addTarget(self, action: #selector(CustomPickerDialog.buttonTapped), for: UIControlEvents.touchUpInside)
         container.addSubview(self.doneButton)
     }
 
